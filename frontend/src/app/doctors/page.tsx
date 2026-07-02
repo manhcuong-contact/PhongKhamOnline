@@ -11,12 +11,23 @@ import { BookingModal } from '@/components/booking/BookingModal';
 import { Search, Loader2, Building2 } from 'lucide-react';
 import { useSearchParams, useRouter } from 'next/navigation';
 
+const COMMON_SYMPTOMS = [
+  "Đau đầu", "Đau bụng", "Đau dạ dày", "Đau họng", "Đau nhức xương khớp", "Đau lưng", 
+  "Ho khan", "Ho có đờm", 
+  "Sốt cao", "Sổ mũi", 
+  "Buồn nôn", "Chóng mặt", 
+  "Khó thở", "Tức ngực", 
+  "Nổi mẩn ngứa", "Dị ứng",
+  "Tiêu chảy", "Táo bón", "Mất ngủ", "Mệt mỏi"
+];
+
 function DoctorsContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   
   const [doctors, setDoctors] = React.useState<any[]>([]);
   const [symptoms, setSymptoms] = React.useState('');
+  const [showSuggestions, setShowSuggestions] = React.useState(false);
   const [suggestedSpecialties, setSuggestedSpecialties] = React.useState<string[]>([]);
   
   const initialSpecialty = searchParams.get('specialty') || '';
@@ -74,6 +85,10 @@ function DoctorsContent() {
     }
   };
 
+  const filteredSymptoms = COMMON_SYMPTOMS.filter(s => 
+    symptoms.trim() && s.toLowerCase().includes(symptoms.toLowerCase())
+  );
+
   return (
     <>
       <main className="flex-1 container mx-auto px-4 py-8">
@@ -97,13 +112,33 @@ function DoctorsContent() {
               <option value="Da liễu">Da liễu</option>
             </Select>
 
-            <Input 
-              placeholder="VD: tôi bị đau đầu, ho và sốt..." 
-              value={symptoms}
-              onChange={e => setSymptoms(e.target.value)}
-              onKeyDown={e => e.key === 'Enter' && handleSuggest()}
-              className="flex-1"
-            />
+            <div className="relative flex-1">
+              <Input 
+                placeholder="VD: tôi bị đau đầu, ho và sốt..." 
+                value={symptoms}
+                onChange={e => { setSymptoms(e.target.value); setShowSuggestions(true); }}
+                onFocus={() => setShowSuggestions(true)}
+                onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
+                onKeyDown={e => e.key === 'Enter' && handleSuggest()}
+                className="w-full"
+              />
+              {showSuggestions && filteredSymptoms.length > 0 && (
+                <div className="absolute z-10 w-full mt-1 bg-white border border-surface rounded-xl shadow-lg max-h-60 overflow-y-auto text-left">
+                  {filteredSymptoms.map(s => (
+                    <div 
+                      key={s} 
+                      className="px-4 py-2 hover:bg-slate-50 cursor-pointer text-sm text-text transition-colors"
+                      onClick={() => {
+                        setSymptoms(s);
+                        setShowSuggestions(false);
+                      }}
+                    >
+                      {s}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
             <Button onClick={handleSuggest} disabled={isSuggesting}>
               {isSuggesting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Search className="h-4 w-4 mr-2" />}
               Tìm kiếm
