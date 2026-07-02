@@ -80,7 +80,7 @@ if (process.env.NODE_ENV === 'production') {
   const frontendPath = path.join(__dirname, '../frontend/out');
   
   // Serve static assets (js, css, images, txt files)
-  app.use(express.static(frontendPath, { index: false }));
+  app.use(express.static(frontendPath, { index: false, redirect: false }));
   
   // Handle Next.js routing
   app.get(/^(?!\/api).*/, (req, res) => {
