@@ -10,7 +10,7 @@ import { BookingModal } from '@/components/booking/BookingModal';
 import { Search, Loader2, Building2 } from 'lucide-react';
 import { useSearchParams, useRouter } from 'next/navigation';
 
-export default function DoctorsPage() {
+function DoctorsContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   
@@ -49,8 +49,6 @@ export default function DoctorsPage() {
     fetchDoctors(selectedSpecialty, clinicId);
   }, [selectedSpecialty, clinicId]);
 
-  // Sync state with URL if needed, but for simplicity we just read initial
-  // If we want to clear the clinic, we update state and fetch.
   const clearClinicFilter = () => {
     setClinicId('');
     router.replace('/doctors' + (selectedSpecialty ? `?specialty=${encodeURIComponent(selectedSpecialty)}` : ''));
@@ -76,9 +74,7 @@ export default function DoctorsPage() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-slate-50">
-      <Navbar />
-      
+    <>
       <main className="flex-1 container mx-auto px-4 py-8">
         <div className="max-w-2xl mx-auto mb-10 text-center">
           <h1 className="font-outfit text-3xl font-bold text-text mb-4">Đội ngũ Bác sĩ</h1>
@@ -176,7 +172,17 @@ export default function DoctorsPage() {
         onClose={() => setSelectedDoctor(null)} 
         doctor={selectedDoctor} 
       />
+    </>
+  );
+}
 
+export default function DoctorsPage() {
+  return (
+    <div className="flex flex-col min-h-screen bg-slate-50">
+      <Navbar />
+      <React.Suspense fallback={<div className="flex-1 flex justify-center items-center">Đang tải trang...</div>}>
+        <DoctorsContent />
+      </React.Suspense>
       <Footer />
     </div>
   );
