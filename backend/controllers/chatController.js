@@ -1,4 +1,10 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '');
 
@@ -11,6 +17,17 @@ Nhiệm vụ của bạn là:
 4. Trả lời bằng tiếng Việt, ngắn gọn, thân thiện và rõ ràng.
 5. KHÔNG chẩn đoán bệnh, KHÔNG kê đơn thuốc, KHÔNG thay thế ý kiến bác sĩ.
 6. Nếu người dùng hỏi về chủ đề không liên quan đến sức khỏe, lịch hẹn, hoặc phòng khám, hãy lịch sự từ chối và hướng họ về chủ đề y tế.`;
+
+let finalSystemPrompt = SYSTEM_PROMPT;
+try {
+  const faqPath = path.join(__dirname, '../data/faq.csv');
+  if (fs.existsSync(faqPath)) {
+    const faqData = fs.readFileSync(faqPath, 'utf8');
+    finalSystemPrompt += '\n\nSau đây là dữ liệu FAQ của phòng khám, hãy dùng nó để trả lời chính xác các câu hỏi cơ bản của người dùng:\n' + faqData;
+  }
+} catch (e) {
+  console.error('Error reading faq.csv', e);
+}
 
 export const chat = async (req, res) => {
   try {
@@ -26,7 +43,7 @@ export const chat = async (req, res) => {
 
     const model = genAI.getGenerativeModel({ 
       model: 'gemini-2.5-flash',
-      systemInstruction: SYSTEM_PROMPT,
+      systemInstruction: finalSystemPrompt,
     });
 
     // Chuyển đổi lịch sử hội thoại sang định dạng Gemini

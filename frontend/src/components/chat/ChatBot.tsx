@@ -13,6 +13,13 @@ const INITIAL_MESSAGE: Message = {
   content: 'Xin chào! Tôi là trợ lý sức khỏe AI. Bạn đang gặp triệu chứng gì? Tôi có thể gợi ý bác sĩ chuyên khoa phù hợp cho bạn! 🩺',
 };
 
+const SAMPLE_QUESTIONS = [
+  "Giá khám bệnh là bao nhiêu?",
+  "Làm sao để tôi hủy lịch khám?",
+  "Phòng khám có hỗ trợ BHYT không?",
+  "Cách đăng ký đặt lịch khám?"
+];
+
 export function ChatBot() {
   const [isOpen, setIsOpen] = React.useState(false);
   const [messages, setMessages] = React.useState<Message[]>([INITIAL_MESSAGE]);
@@ -24,13 +31,14 @@ export function ChatBot() {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
-  const sendMessage = async () => {
-    const trimmed = input.trim();
+  const sendMessage = async (overrideInput?: string) => {
+    const textToSend = overrideInput || input;
+    const trimmed = textToSend.trim();
     if (!trimmed || isLoading) return;
 
     const userMessage: Message = { role: 'user', content: trimmed };
     setMessages(prev => [...prev, userMessage]);
-    setInput('');
+    if (!overrideInput) setInput('');
     setIsLoading(true);
 
     try {
@@ -120,6 +128,22 @@ export function ChatBot() {
             <div ref={messagesEndRef} />
           </div>
 
+          {/* Quick Replies */}
+          {messages.length === 1 && (
+            <div className="bg-slate-50 px-3 pb-2 overflow-x-auto whitespace-nowrap flex gap-2 hide-scrollbar">
+              {SAMPLE_QUESTIONS.map((q, i) => (
+                <button
+                  key={i}
+                  onClick={() => sendMessage(q)}
+                  disabled={isLoading}
+                  className="inline-block px-3 py-1.5 text-xs bg-white border border-primary/20 text-primary rounded-full hover:bg-primary/10 transition-colors disabled:opacity-50"
+                >
+                  {q}
+                </button>
+              ))}
+            </div>
+          )}
+
           {/* Input */}
           <div className="p-3 bg-white border-t border-surface/50 flex gap-2">
             <input
@@ -131,7 +155,7 @@ export function ChatBot() {
               className="flex-1 rounded-xl border border-surface/50 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 bg-slate-50"
             />
             <button
-              onClick={sendMessage}
+              onClick={() => sendMessage()}
               disabled={!input.trim() || isLoading}
               className="w-9 h-9 flex items-center justify-center rounded-xl bg-primary text-white disabled:opacity-50 hover:bg-primary/90 transition-colors shrink-0"
             >
