@@ -10,7 +10,7 @@ const router = express.Router();
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
   max: 5, // Limit each IP to 5 login/register requests per windowMs
-  message: 'Quá nhiều yêu cầu, vui lòng thử lại sau 15 phút',
+  message: { message: 'Quá nhiều yêu cầu, vui lòng thử lại sau 15 phút' },
 });
 
 router.post('/register', authLimiter, validate(registerSchema), register);

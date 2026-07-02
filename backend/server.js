@@ -27,6 +27,8 @@ const port = process.env.PORT || 5000;
 connectDB();
 
 const app = express();
+// Enable trust proxy so rate limiters get the correct client IP on Render
+app.set('trust proxy', 1);
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
   cors: {
