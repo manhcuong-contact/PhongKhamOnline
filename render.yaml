@@ -1,0 +1,42 @@
+services:
+  # ========== BACKEND ==========
+  - type: web
+    name: phongkham-backend
+    runtime: node
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: node server.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: MONGO_URI
+        sync: false   # Điền thủ công trên Render Dashboard
+      - key: JWT_SECRET
+        sync: false
+      - key: JWT_REFRESH_SECRET
+        sync: false
+      - key: JWT_EXPIRES_IN
+        value: 15m
+      - key: JWT_REFRESH_EXPIRES_IN
+        value: 7d
+      - key: FRONTEND_URL
+        sync: false   # Điền URL frontend sau khi deploy
+      - key: BREVO_API_KEY
+        sync: false
+      - key: GEMINI_API_KEY
+        sync: false
+
+  # ========== FRONTEND ==========
+  - type: web
+    name: phongkham-frontend
+    runtime: node
+    rootDir: frontend
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: NEXT_PUBLIC_API_URL
+        sync: false   # Điền: https://phongkham-backend.onrender.com/api
