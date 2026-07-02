@@ -12,13 +12,11 @@ import { Search, Loader2, Building2 } from 'lucide-react';
 import { useSearchParams, useRouter } from 'next/navigation';
 
 const COMMON_SYMPTOMS = [
-  "Đau đầu", "Đau bụng", "Đau dạ dày", "Đau họng", "Đau nhức xương khớp", "Đau lưng", 
-  "Ho khan", "Ho có đờm", 
-  "Sốt cao", "Sổ mũi", 
-  "Buồn nôn", "Chóng mặt", 
-  "Khó thở", "Tức ngực", 
-  "Nổi mẩn ngứa", "Dị ứng",
-  "Tiêu chảy", "Táo bón", "Mất ngủ", "Mệt mỏi"
+  "đau đầu", "chóng mặt", "buồn nôn", "mệt mỏi", "sốt", "khó thở", "đau ngực",
+  "chấn thương", "gãy xương", "đau cơ", "bong gân", "trật khớp", "vết thương hở",
+  "biếng ăn", "quấy khóc", "ho ở trẻ", "nôn trớ", "phát ban ở trẻ", "sốt cao ở trẻ",
+  "thai kỳ", "rong kinh", "đau bụng dưới", "khám thai", "viêm nhiễm phụ khoa",
+  "nổi mụn", "mẩn ngứa", "phát ban", "viêm da", "rụng tóc", "dị ứng da"
 ];
 
 function DoctorsContent() {
