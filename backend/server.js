@@ -86,6 +86,6 @@ if (process.env.NODE_ENV === 'production') {
 
 }
 
-httpServer.listen(port, () => {
+httpServer.listen(port, '0.0.0.0', () => {
   console.log(`Server running in ${process.env.NODE_ENV || 'development'} mode on port ${port}`);
 });
