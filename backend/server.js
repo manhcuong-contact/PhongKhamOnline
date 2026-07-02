@@ -62,7 +62,7 @@ app.use('/api/chat', chatRoutes);
 app.use('/api/admin', adminRoutes);
 
 // Basic route
-app.get('/', (req, res) => {
+app.get('/api', (req, res) => {
   res.send('API is running...');
 });
 

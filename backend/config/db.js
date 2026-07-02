@@ -23,7 +23,8 @@ export const connectDB = async () => {
     const conn = await mongoose.connect(uri);
     console.log(`MongoDB Connected: ${conn.connection.host}`);
   } catch (error) {
-    console.error(`Error: ${error.message}`);
-    process.exit(1);
+    console.error(`MongoDB Connection Error: ${error.message}`);
+    // We don't exit the process here so that the frontend can still be served 
+    // even if the database connection string is slightly misconfigured.
   }
 };
