@@ -24,15 +24,16 @@ export const validate = (schema) => (req, res, next) => {
     });
     next();
   } catch (error) {
-    if (error instanceof z.ZodError) {
+    if (error.name === 'ZodError' || error instanceof z.ZodError) {
       return res.status(400).json({
-        message: 'Dữ liệu đầu vào không hợp lệ',
-        errors: error.errors.map((e) => ({
+        message: error.issues ? error.issues[0].message : 'Dữ liệu đầu vào không hợp lệ',
+        errors: error.issues?.map((e) => ({
           field: e.path.join('.'),
           message: e.message,
         })),
       });
     }
-    next(error);
+    console.error('Validation error fallback:', error);
+    return res.status(400).json({ message: 'Lỗi xác thực: ' + (error.message || 'Dữ liệu không hợp lệ') });
   }
 };
