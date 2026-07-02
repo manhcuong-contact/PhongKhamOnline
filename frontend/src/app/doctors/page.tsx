@@ -31,7 +31,7 @@ function DoctorsContent() {
   const fetchDoctors = async (spec?: string, cId?: string) => {
     try {
       setIsLoading(true);
-      let url = `${process.env.NEXT_PUBLIC_API_URL}/doctors?`;
+      let url = `${process.env.NEXT_PUBLIC_API_URL || '/api'}/doctors?`;
       if (spec) url += `specialty=${encodeURIComponent(spec)}&`;
       if (cId) url += `clinicId=${encodeURIComponent(cId)}&`;
       
@@ -58,7 +58,7 @@ function DoctorsContent() {
     if (!symptoms.trim()) return;
     try {
       setIsSuggesting(true);
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/doctors/suggest?symptoms=${encodeURIComponent(symptoms)}`);
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || '/api'}/doctors/suggest?symptoms=${encodeURIComponent(symptoms)}`);
       const data = await res.json();
       if (data.specialties && data.specialties.length > 0) {
         setSuggestedSpecialties(data.specialties);

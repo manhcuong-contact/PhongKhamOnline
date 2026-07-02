@@ -115,7 +115,7 @@ export function BookingModal({ isOpen, onClose, doctor }: BookingModalProps) {
     const datetime = new Date(`${selectedDate}T${startHourStr}:00`);
 
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/appointments`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || '/api'}/appointments`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',

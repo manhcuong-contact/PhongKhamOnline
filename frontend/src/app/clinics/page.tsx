@@ -20,7 +20,7 @@ export default function ClinicsPage() {
   const fetchClinics = async (lat?: number, lng?: number) => {
     try {
       setIsLoading(true);
-      let url = `${process.env.NEXT_PUBLIC_API_URL}/clinics`;
+      let url = `${process.env.NEXT_PUBLIC_API_URL || '/api'}/clinics`;
       if (lat && lng) {
         url += `?lat=${lat}&lng=${lng}`;
       }

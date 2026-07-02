@@ -21,7 +21,7 @@ export default function AdminAppointmentsPage() {
   const fetchAppointments = async () => {
     setIsLoading(true);
     try {
-      const url = `${process.env.NEXT_PUBLIC_API_URL}/admin/appointments`;
+      const url = `${process.env.NEXT_PUBLIC_API_URL || '/api'}/admin/appointments`;
       const res = await fetch(url, { credentials: 'include' });
       const data = await res.json();
       setAppointments(data.appointments || []);
@@ -37,7 +37,7 @@ export default function AdminAppointmentsPage() {
   const handleStatusChange = async (appointmentId: string, newStatus: string) => {
     setUpdating(appointmentId);
     try {
-      await fetch(`${process.env.NEXT_PUBLIC_API_URL}/admin/appointments/${appointmentId}/status`, {
+      await fetch(`${process.env.NEXT_PUBLIC_API_URL || '/api'}/admin/appointments/${appointmentId}/status`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',

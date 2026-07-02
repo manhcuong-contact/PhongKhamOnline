@@ -5,7 +5,7 @@ export function useAuth() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/me`, {
+    fetch(`${process.env.NEXT_PUBLIC_API_URL || '/api'}/auth/me`, {
       credentials: 'include',
     })
       .then((res) => {

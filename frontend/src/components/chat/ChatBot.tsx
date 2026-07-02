@@ -35,7 +35,7 @@ export function ChatBot() {
 
     try {
       const history = messages.slice(1); // Bỏ tin nhắn chào ban đầu khi gửi lên API
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/chat`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || '/api'}/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: trimmed, history }),

@@ -24,7 +24,7 @@ export default function HistoryPage() {
   const fetchAppointments = async () => {
     try {
       setIsLoading(true);
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/appointments`, { credentials: 'include' });
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || '/api'}/appointments`, { credentials: 'include' });
       if (res.status === 401) {
         setError('Vui lòng đăng nhập để xem lịch sử khám');
         return;
@@ -45,7 +45,7 @@ export default function HistoryPage() {
     
     setCancellingId(appointmentId);
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/appointments/${appointmentId}/cancel`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || '/api'}/appointments/${appointmentId}/cancel`, {
         method: 'PUT',
         credentials: 'include'
       });
