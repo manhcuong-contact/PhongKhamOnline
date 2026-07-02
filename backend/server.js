@@ -15,6 +15,8 @@ import { initSockets } from './sockets/lockSocket.js';
 import chatRoutes from './routes/chat.js';
 import adminRoutes from './routes/admin.js';
 import { startReminderJob } from './jobs/reminderJob.js';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
 dotenv.config();
 
@@ -69,6 +71,19 @@ initSockets(io);
 
 // Cron Jobs
 startReminderJob();
+
+// Serve frontend in production
+if (process.env.NODE_ENV === 'production') {
+  const __filename = fileURLToPath(import.meta.url);
+  const __dirname = path.dirname(__filename);
+  const frontendPath = path.join(__dirname, '../frontend/out');
+  
+  app.use(express.static(frontendPath, { extensions: ['html'] }));
+  
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(frontendPath, 'index.html'));
+  });
+}
 
 httpServer.listen(port, () => {
   console.log(`Server running in ${process.env.NODE_ENV || 'development'} mode on port ${port}`);

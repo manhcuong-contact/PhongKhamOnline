@@ -5,6 +5,9 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { LayoutDashboard, CalendarDays, Hospital, Users, LogOut, Menu, X } from 'lucide-react';
 
+import { useRouter } from 'next/navigation';
+import { useAuth } from '@/hooks/useAuth';
+
 const navItems = [
   { href: '/admin',              label: 'Tổng quan',        icon: LayoutDashboard },
   { href: '/admin/appointments', label: 'Lịch hẹn',         icon: CalendarDays },
@@ -14,7 +17,19 @@ const navItems = [
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const router = useRouter();
+  const { user, isLoading } = useAuth();
   const [sidebarOpen, setSidebarOpen] = React.useState(false);
+
+  React.useEffect(() => {
+    if (!isLoading && (!user || user.role !== 'admin')) {
+      router.push('/login');
+    }
+  }, [user, isLoading, router]);
+
+  if (isLoading || !user || user.role !== 'admin') {
+    return <div className="flex h-screen items-center justify-center bg-slate-100">Đang kiểm tra quyền truy cập...</div>;
+  }
 
   return (
     <div className="flex h-screen bg-slate-100 overflow-hidden">
