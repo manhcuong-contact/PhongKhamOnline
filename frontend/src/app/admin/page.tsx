@@ -44,7 +44,7 @@ export default function AdminDashboard() {
   const [isLoading, setIsLoading] = React.useState(true);
 
   React.useEffect(() => {
-    fetch(`${process.env.NEXT_PUBLIC_API_URL || '/api'}/admin/stats`, { credentials: 'include' })
+    fetch(`${(typeof process !== 'undefined' && process.env.NEXT_PUBLIC_API_URL ? process.env.NEXT_PUBLIC_API_URL : '/api')}/admin/stats`, { credentials: 'include' })
       .then(r => r.json())
       .then(setData)
       .catch(console.error)

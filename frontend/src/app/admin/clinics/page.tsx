@@ -8,7 +8,7 @@ export default function AdminClinicsPage() {
   const [isLoading, setIsLoading] = React.useState(true);
 
   React.useEffect(() => {
-    fetch(`${process.env.NEXT_PUBLIC_API_URL || '/api'}/clinics`)
+    fetch(`${(typeof process !== 'undefined' && process.env.NEXT_PUBLIC_API_URL ? process.env.NEXT_PUBLIC_API_URL : '/api')}/clinics`)
       .then(r => r.json())
       .then(data => setClinics(data.clinics || []))
       .catch(console.error)

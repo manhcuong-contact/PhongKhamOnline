@@ -38,7 +38,8 @@ export function BookingModal({ isOpen, onClose, doctor }: BookingModalProps) {
     if (!isOpen || !doctor) return;
 
     // Connect socket
-    const socketUrl = process.env.NEXT_PUBLIC_API_URL?.replace('/api', '') || 'http://localhost:5000';
+    const apiUrl = typeof process !== 'undefined' && process.env.NEXT_PUBLIC_API_URL ? process.env.NEXT_PUBLIC_API_URL : '/api';
+    const socketUrl = apiUrl === '/api' ? '' : apiUrl.replace('/api', '');
     const socket = io(socketUrl);
     socketRef.current = socket;
 
@@ -115,7 +116,7 @@ export function BookingModal({ isOpen, onClose, doctor }: BookingModalProps) {
     const datetime = new Date(`${selectedDate}T${startHourStr}:00`);
 
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || '/api'}/appointments`, {
+      const res = await fetch(`${(typeof process !== 'undefined' && process.env.NEXT_PUBLIC_API_URL ? process.env.NEXT_PUBLIC_API_URL : '/api')}/appointments`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',

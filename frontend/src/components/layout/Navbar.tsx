@@ -11,7 +11,7 @@ export function Navbar() {
   const [isLoading, setIsLoading] = React.useState(true);
 
   React.useEffect(() => {
-    fetch(`${process.env.NEXT_PUBLIC_API_URL || '/api'}/auth/me`, { credentials: 'include' })
+    fetch(`${(typeof process !== 'undefined' && process.env.NEXT_PUBLIC_API_URL ? process.env.NEXT_PUBLIC_API_URL : '/api')}/auth/me`, { credentials: 'include' })
       .then(res => res.json())
       .then(data => {
         if (data.user) setUser(data.user);
@@ -21,7 +21,7 @@ export function Navbar() {
   }, []);
 
   const handleLogout = async () => {
-    await fetch(`${process.env.NEXT_PUBLIC_API_URL || '/api'}/auth/logout`, { method: 'POST', credentials: 'include' });
+    await fetch(`${(typeof process !== 'undefined' && process.env.NEXT_PUBLIC_API_URL ? process.env.NEXT_PUBLIC_API_URL : '/api')}/auth/logout`, { method: 'POST', credentials: 'include' });
     setUser(null);
     router.push('/');
   };
