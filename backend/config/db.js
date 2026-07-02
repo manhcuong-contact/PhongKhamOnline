@@ -20,7 +20,9 @@ export const connectDB = async () => {
       await importData(false); // Do not exit process after seeding
       return;
     }
-    const conn = await mongoose.connect(uri);
+    const conn = await mongoose.connect(uri, {
+      serverSelectionTimeoutMS: 5000, // Fail after 5 seconds instead of hanging forever
+    });
     console.log(`MongoDB Connected: ${conn.connection.host}`);
   } catch (error) {
     console.error(`MongoDB Connection Error: ${error.message}`);
