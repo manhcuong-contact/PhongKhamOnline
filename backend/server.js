@@ -1,4 +1,5 @@
 import express from 'express';
+import fs from 'fs';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import helmet from 'helmet';
@@ -78,12 +79,27 @@ if (process.env.NODE_ENV === 'production') {
   const __dirname = path.dirname(__filename);
   const frontendPath = path.join(__dirname, '../frontend/out');
   
-  app.use(express.static(frontendPath, { extensions: ['html'] }));
+  // Serve static assets (js, css, images, txt files)
+  app.use(express.static(frontendPath, { index: false }));
   
-  app.get(/.*/, (req, res) => {
-    res.sendFile(path.join(frontendPath, 'index.html'));
-  });
+  // Handle Next.js routing
+  app.get(/^(?!\/api).*/, (req, res) => {
+    let cleanPath = req.path;
+    if (cleanPath.endsWith('/') && cleanPath.length > 1) {
+      cleanPath = cleanPath.slice(0, -1);
+    }
 
+    if (cleanPath === '/') {
+      return res.sendFile(path.join(frontendPath, 'index.html'));
+    }
+
+    const htmlPath = path.join(frontendPath, `${cleanPath}.html`);
+    if (fs.existsSync(htmlPath)) {
+      return res.sendFile(htmlPath);
+    }
+
+    res.sendFile(path.join(frontendPath, '404.html'));
+  });
 }
 
 httpServer.listen(port, '0.0.0.0', () => {
