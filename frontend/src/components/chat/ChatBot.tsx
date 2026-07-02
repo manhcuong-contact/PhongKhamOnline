@@ -129,20 +129,24 @@ export function ChatBot() {
           </div>
 
           {/* Quick Replies */}
-          {messages.length === 1 && (
-            <div className="bg-slate-50 px-3 pb-2 overflow-x-auto whitespace-nowrap flex gap-2 hide-scrollbar">
-              {SAMPLE_QUESTIONS.map((q, i) => (
-                <button
-                  key={i}
-                  onClick={() => sendMessage(q)}
-                  disabled={isLoading}
-                  className="inline-block px-3 py-1.5 text-xs bg-white border border-primary/20 text-primary rounded-full hover:bg-primary/10 transition-colors disabled:opacity-50"
-                >
-                  {q}
-                </button>
-              ))}
-            </div>
-          )}
+          {(() => {
+            const unaskedQuestions = SAMPLE_QUESTIONS.filter(q => !messages.some(m => m.content === q));
+            if (unaskedQuestions.length === 0) return null;
+            return (
+              <div className="bg-slate-50 px-3 pb-2 overflow-x-auto whitespace-nowrap flex gap-2 hide-scrollbar">
+                {unaskedQuestions.map((q, i) => (
+                  <button
+                    key={i}
+                    onClick={() => sendMessage(q)}
+                    disabled={isLoading}
+                    className="inline-block px-3 py-1.5 text-xs bg-white border border-primary/20 text-primary rounded-full hover:bg-primary/10 transition-colors disabled:opacity-50"
+                  >
+                    {q}
+                  </button>
+                ))}
+              </div>
+            );
+          })()}
 
           {/* Input */}
           <div className="p-3 bg-white border-t border-surface/50 flex gap-2">
