@@ -1,0 +1,32 @@
+@import "tailwindcss";
+@import "leaflet/dist/leaflet.css";
+@import "leaflet-routing-machine/dist/leaflet-routing-machine.css";
+@import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css";
+@theme {
+  --color-primary: #059669;
+  --color-primary-hover: #047857;
+  --color-background: #fdfbf7;
+  --color-surface: #ffffff;
+  --color-text: #1c1917;
+  --color-text-light: #78716c;
+  --color-accent: #0ea5e9;
+  
+  --font-outfit: var(--font-outfit);
+  --font-roboto: var(--font-roboto);
+}
+
+:root {
+  --background: #fdfbf7;
+  --foreground: #1c1917;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+}
+
+@layer utilities {
+  .glass {
+    @apply bg-surface/70 backdrop-blur-md border border-surface/20;
+  }
+}
