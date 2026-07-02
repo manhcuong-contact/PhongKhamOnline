@@ -51,6 +51,19 @@ export const sendBookingCancellation = (userEmail, userName, doctorName, dateStr
     `,
   });
 
+export const sendCompletionEmail = (userEmail, userName, doctorName, dateStr) =>
+  sendEmail({
+    to: [{ email: userEmail, name: userName }],
+    subject: 'Khám bệnh thành công ✅',
+    htmlContent: `
+      <h3>Xin chào ${userName},</h3>
+      <p>Cuộc hẹn khám bệnh của bạn với bác sĩ <strong>${doctorName}</strong> vào lúc <strong>${dateStr}</strong> đã hoàn thành.</p>
+      <p>Cảm ơn bạn đã tin tưởng và sử dụng dịch vụ của Hệ thống Phòng Khám Online.</p>
+      <p>Chúc bạn thật nhiều sức khỏe!</p>
+      <br/><p>Trân trọng,<br/>Hệ thống Phòng Khám Online</p>
+    `,
+  });
+
 export const sendReminderEmail = (userEmail, userName, doctorName, dateStr) =>
   sendEmail({
     to: [{ email: userEmail, name: userName }],

@@ -2,6 +2,7 @@ import Appointment from '../models/Appointment.js';
 import User from '../models/User.js';
 import Clinic from '../models/Clinic.js';
 import Doctor from '../models/Doctor.js';
+import { sendCompletionEmail } from '../services/emailService.js';
 
 export const getStats = async (req, res) => {
   try {
@@ -62,8 +63,16 @@ export const updateAppointmentStatus = async (req, res) => {
       return res.status(400).json({ message: 'Trạng thái không hợp lệ' });
     }
 
-    const appointment = await Appointment.findByIdAndUpdate(id, { status }, { new: true });
+    const appointment = await Appointment.findByIdAndUpdate(id, { status }, { new: true })
+      .populate('userId', 'name email')
+      .populate('doctorId', 'name');
     if (!appointment) return res.status(404).json({ message: 'Không tìm thấy lịch hẹn' });
+
+    if (status === 'completed' && appointment.userId?.email) {
+      const appTime = new Date(appointment.datetime);
+      const dateStr = `${appTime.toLocaleDateString('vi-VN')} lúc ${appTime.getHours()}:00`;
+      sendCompletionEmail(appointment.userId.email, appointment.userId.name, appointment.doctorId.name, dateStr);
+    }
 
     res.status(200).json({ message: 'Cập nhật thành công', appointment });
   } catch (error) {
