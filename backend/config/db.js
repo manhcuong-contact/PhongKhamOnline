@@ -7,7 +7,7 @@ let mongod = null;
 export const connectDB = async () => {
   try {
     let uri = process.env.MONGO_URI || process.env.MONGO_URL;
-    if (!uri || uri.includes('cluster0.mongodb.net')) {
+    if (!uri || uri.includes('<your-cluster>')) {
       console.log('MongoDB URI is missing or placeholder. Falling back to mongodb-memory-server for local testing...');
       mongod = await MongoMemoryServer.create();
       uri = mongod.getUri();
