@@ -53,16 +53,16 @@ export function Navbar() {
         </nav>
 
         <div className="flex items-center gap-4">
-          {!isLoading && user ? (
+          {user ? (
             <div className="flex items-center gap-3">
               <span className="text-sm font-medium text-text hidden sm:inline">Chào, {user.name}</span>
               <Button variant="outline" size="sm" onClick={handleLogout}>Đăng xuất</Button>
             </div>
-          ) : !isLoading && !user ? (
-            <Link href="/login" className="hidden sm:inline-flex">
+          ) : (
+            <Link href="/login">
               <Button variant="ghost">Đăng nhập</Button>
             </Link>
-          ) : null}
+          )}
           <Link href="/doctors">
             <Button>Đặt lịch ngay</Button>
           </Link>
