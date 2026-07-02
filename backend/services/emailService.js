@@ -5,7 +5,11 @@ dotenv.config();
 // Brevo v5 SDK - dùng BrevoClient với apiKey
 const getClient = () => new BrevoClient({ apiKey: process.env.BREVO_API_KEY || '' });
 
-const SENDER = { email: 'no-reply@phongkhamonline.com', name: 'Phòng Khám Online' };
+// Lấy email người gửi từ biến môi trường (phải là email đã được xác minh trên Brevo)
+const SENDER = { 
+  email: process.env.BREVO_SENDER_EMAIL || 'admin@phongkhamonline.vn', 
+  name: 'Phòng Khám Online' 
+};
 
 const sendEmail = async ({ to, subject, htmlContent }) => {
   if (!process.env.BREVO_API_KEY) {
