@@ -6,6 +6,7 @@ import { Footer } from '@/components/layout/Footer';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Select } from '@/components/ui/select';
 import { BookingModal } from '@/components/booking/BookingModal';
 import { Search, Loader2, Building2 } from 'lucide-react';
 import { useSearchParams, useRouter } from 'next/navigation';
@@ -83,6 +84,19 @@ function DoctorsContent() {
           </p>
           
           <div className="flex gap-2">
+            <Select 
+              value={selectedSpecialty} 
+              onChange={e => setSelectedSpecialty(e.target.value)}
+              className="w-[180px] shrink-0"
+            >
+              <option value="">Tất cả chuyên khoa</option>
+              <option value="Nội khoa">Nội khoa</option>
+              <option value="Ngoại khoa">Ngoại khoa</option>
+              <option value="Nhi khoa">Nhi khoa</option>
+              <option value="Sản phụ khoa">Sản phụ khoa</option>
+              <option value="Da liễu">Da liễu</option>
+            </Select>
+
             <Input 
               placeholder="VD: tôi bị đau đầu, ho và sốt..." 
               value={symptoms}
@@ -92,7 +106,7 @@ function DoctorsContent() {
             />
             <Button onClick={handleSuggest} disabled={isSuggesting}>
               {isSuggesting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Search className="h-4 w-4 mr-2" />}
-              Gợi ý
+              Tìm kiếm
             </Button>
           </div>
 
